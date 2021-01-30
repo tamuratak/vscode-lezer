@@ -3,6 +3,9 @@
 	"name": "Lezer",
 	"patterns": [
 		{
+			"include": "#comment"
+        },
+		{
 			"include": "#keywords"
         },
         {
@@ -22,6 +25,14 @@
         }
 	],
 	"repository": {
+		"comment": {
+			"patterns": [
+				{
+					"name": "comment.line.double-slash.lezer",
+					"match": "//.*$"
+				}
+			]
+		},
 		"keywords": {
 			"patterns": [
                 {
