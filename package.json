@@ -1,7 +1,7 @@
 {
   "name": "vscode-lezer",
   "displayName": "Lezer",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "tamuratak",
   "license": "MIT",
   "description": "Lezer language support for Visual Studio Code",
@@ -22,7 +22,7 @@
         "id": "lezer",
         "aliases": ["Lezer", "lezer"],
         "extensions": [ ".grammar" ],
-        "configuration": "./syntax/syntax.json"
+        "configuration": "./syntax/language-configuration.json"
       }
     ],
     "grammars": [
