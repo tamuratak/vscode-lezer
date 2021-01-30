@@ -1,0 +1,84 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Lezer",
+	"patterns": [
+		{
+			"include": "#keywords"
+        },
+        {
+            "include": "#std"
+        },
+        {
+            "include": "#kw"
+        },
+        {
+			"include": "#regex"
+        },
+		{
+			"include": "#dq_strings"
+        },
+        {
+			"include": "#sq_strings"
+        }
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+                {
+                    "name": "keyword.control.lezer",
+                    "match": "@(precedence|top|skip|specialize|export|name|external|tokens|left|isGroup|detectDelim)"
+                }
+            ]
+        },
+        "std": {
+			"patterns": [
+                {
+                    "name": "variable.other.constant.lezer",
+                    "match": "\\bstd\\.(asciiLetter|asciiLowercase|asciiUppercase|digit|whitespace)"
+                }
+            ]
+        },
+        "kw": {
+			"patterns": [
+                {
+                    "name": "variable.other.constant.lezer",
+                    "match": "\\bkw\\b"
+                }
+            ]
+		},
+		"dq_strings": {
+			"name": "string.quoted.double.lezer",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.lezer",
+					"match": "\\\\."
+				}
+			]
+        },
+        "sq_strings": {
+			"name": "string.quoted.single.lezer",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.lezer",
+					"match": "\\\\."
+				}
+			]
+        },
+        "regex": {
+			"name": "string.regexp.double.lezer",
+			"begin": "[$!]\\[",
+			"end": "\\]",
+			"patterns": [
+				{
+					"name": "constant.character.escape.lezer",
+					"match": "\\\\."
+				}
+			]
+        }
+	},
+	"scopeName": "source.lezer"
+}
