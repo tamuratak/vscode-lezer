@@ -1,0 +1,1 @@
+Lezer grammar support for VS Code.

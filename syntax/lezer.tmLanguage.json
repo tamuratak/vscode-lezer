@@ -40,7 +40,7 @@
 			"patterns": [
                 {
                     "name": "keyword.control.lezer",
-                    "match": "@(precedence|top|skip|specialize|export|name|external|tokens|left|isGroup|detectDelim)"
+                    "match": "@(conflict|external|export|detectDelim|isGroup|left|name|precedence|skip|specialize|tokens|top)"
                 }
             ]
 		},
