@@ -1,106 +1,106 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Lezer",
-	"patterns": [
-		{
-			"include": "#comment"
-        },
-		{
-			"include": "#keywords"
-		},
-		{
-			"include": "#capRule"
-		},
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Lezer",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#capRule"
+    },
+    {
+      "include": "#std"
+    },
+    {
+      "include": "#kw"
+    },
+    {
+      "include": "#regex"
+    },
+    {
+      "include": "#dq_strings"
+    },
+    {
+      "include": "#sq_strings"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "patterns": [
         {
-            "include": "#std"
-        },
-        {
-            "include": "#kw"
-        },
-        {
-			"include": "#regex"
-        },
-		{
-			"include": "#dq_strings"
-        },
-        {
-			"include": "#sq_strings"
+          "name": "comment.line.double-slash.lezer",
+          "match": "//.*$"
         }
-	],
-	"repository": {
-		"comment": {
-			"patterns": [
-				{
-					"name": "comment.line.double-slash.lezer",
-					"match": "//.*$"
-				}
-			]
-		},
-		"keywords": {
-			"patterns": [
-                {
-                    "name": "keyword.control.lezer",
-                    "match": "@(conflict|dialects|external|export|detectDelim|isGroup|left|name|precedence|skip|specialize|tokens|top)"
-                }
-            ]
-		},
-		"capRule": {
-			"patterns": [
-				{
-					"name": "entity.name.type.class.lezer",
-					"match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
-				}
-			]
-		},
-        "std": {
-			"patterns": [
-                {
-                    "name": "variable.other.constant.lezer",
-                    "match": "\\bstd\\.(asciiLetter|asciiLowercase|asciiUppercase|digit|whitespace)"
-                }
-            ]
-        },
-        "kw": {
-			"patterns": [
-                {
-                    "name": "variable.other.constant.lezer",
-                    "match": "\\bkw\\b"
-                }
-            ]
-		},
-		"dq_strings": {
-			"name": "string.quoted.double.lezer",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"name": "constant.character.escape.lezer",
-					"match": "\\\\."
-				}
-			]
-        },
-        "sq_strings": {
-			"name": "string.quoted.single.lezer",
-			"begin": "'",
-			"end": "'",
-			"patterns": [
-				{
-					"name": "constant.character.escape.lezer",
-					"match": "\\\\."
-				}
-			]
-        },
-        "regex": {
-			"name": "string.regexp.double.lezer",
-			"begin": "[$!]\\[",
-			"end": "\\]",
-			"patterns": [
-				{
-					"name": "constant.character.escape.lezer",
-					"match": "\\\\."
-				}
-			]
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.lezer",
+          "match": "@(conflict|dialects|external|export|detectDelim|isGroup|left|name|precedence|skip|specialize|tokens|top)"
         }
-	},
-	"scopeName": "source.lezer"
+      ]
+    },
+    "capRule": {
+      "patterns": [
+        {
+          "name": "entity.name.type.class.lezer",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "std": {
+      "patterns": [
+        {
+          "name": "variable.other.constant.lezer",
+          "match": "\\bstd\\.(asciiLetter|asciiLowercase|asciiUppercase|digit|whitespace)"
+        }
+      ]
+    },
+    "kw": {
+      "patterns": [
+        {
+          "name": "variable.other.constant.lezer",
+          "match": "\\bkw\\b"
+        }
+      ]
+    },
+    "dq_strings": {
+      "name": "string.quoted.double.lezer",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.lezer",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "sq_strings": {
+      "name": "string.quoted.single.lezer",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.lezer",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "regex": {
+      "name": "string.regexp.double.lezer",
+      "begin": "[$!]\\[",
+      "end": "\\]",
+      "patterns": [
+        {
+          "name": "constant.character.escape.lezer",
+          "match": "\\\\."
+        }
+      ]
+    }
+  },
+  "scopeName": "source.lezer"
 }
