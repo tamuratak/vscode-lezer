@@ -6,6 +6,9 @@
       "include": "#comment"
     },
     {
+      "include": "#blockComment"
+    },
+    {
       "include": "#keywords"
     },
     {
@@ -35,6 +38,11 @@
           "match": "//.*$"
         }
       ]
+    },
+    "blockComment": {
+      "name": "comment.block.documentation.lezer",
+      "begin": "/\\*",
+      "end": "\\*/"
     },
     "keywords": {
       "patterns": [
