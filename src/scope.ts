@@ -6,11 +6,11 @@ export class Scope {
     private readonly children: Scope[]
     private readonly ruleDefs: lezer.SyntaxNode[]
 
-    constructor(content: string, node: lezer.SyntaxNode, children: Scope[], variables: lezer.SyntaxNode[]) {
+    constructor(content: string, node: lezer.SyntaxNode, children: Scope[], ruleDefs: lezer.SyntaxNode[]) {
         this.content = content
         this.node = node
         this.children = children
-        this.ruleDefs = variables
+        this.ruleDefs = ruleDefs
     }
 
     findDef(node: { name: string, pos: number }): lezer.SyntaxNode | undefined{
@@ -36,28 +36,29 @@ export class Scope {
         if (!defNode){
             return []
         }
-        const rootNode = defNode.parent
-        if (rootNode) {
-            return this.findIds(rootNode, node.name)
+        const rootNode = defNode.parent?.type.isTop ? defNode.parent : defNode
+        const refs = this.findIds(rootNode, node.name)
+        if (defNode.firstChild) {
+            refs.push(defNode.firstChild)
         }
-        return []
+        return refs
     }
 
-    findIds(rootNode: lezer.SyntaxNode, name: string): lezer.SyntaxNode[] {
+    findIds(curNode: lezer.SyntaxNode, name: string): lezer.SyntaxNode[] {
         let ret: lezer.SyntaxNode[] = []
-        let child = rootNode.firstChild
+        let child = curNode.firstChild
         let curRuleName: string | undefined
+        if ( curNode.name === 'Rule' || curNode.name === 'RuleSimple' ) {
+            curRuleName = child ? this.getValue(child) : undefined
+        }
         while (child) {
             if ( child.name === 'Identifier' && this.getValue(child) === name ) {
                 curRuleName = curRuleName || child.name
-                if ( rootNode.name !== 'Rule' && rootNode.name !== 'RuleSimple' ) {
+                if ( curNode.name !== 'Rule' && curNode.name !== 'RuleSimple' ) {
                     ret.push(child)
                 }
             } else {
-                if (
-                    (rootNode.name !== 'Rule' && rootNode.name !== 'RuleSimple') ||
-                    curRuleName !== name
-                ) {
+                if (curRuleName !== name) {
                     const curRet = this.findIds(child, name)
                     ret = ret.concat(curRet)
                 }
@@ -99,19 +100,19 @@ function makeTopScope(content: string, curNode: lezer.SyntaxNode): Scope {
         if (child.name === 'Rule' || child.name === 'RuleSimple') {
             ruleDefs.push(child)
         }
-        const scope = makeScope(content, child)
+        const scope = makeRuleScope(content, child)
         scopeArray.push(scope)
         child = child.nextSibling
     }
     return new Scope(content, curNode, scopeArray, ruleDefs)
 }
 
-function makeScope(content: string, ruleNode: lezer.SyntaxNode): Scope {
-    const scopeArray: Scope[] = []
+function makeRuleScope(content: string, ruleNode: lezer.SyntaxNode): Scope {
+    const childScopes: Scope[] = []
     const rules = findRules(ruleNode)
     for( const rule of rules ) {
-        const scope = makeScope(content, rule)
-        scopeArray.push(scope)
+        const scope = makeRuleScope(content, rule)
+        childScopes.push(scope)
     }
-    return new Scope(content, ruleNode, scopeArray, [ruleNode])
+    return new Scope(content, ruleNode, childScopes, [ruleNode])
 }
