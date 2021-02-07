@@ -38,9 +38,6 @@ export class Scope {
         }
         const rootNode = defNode.parent?.type.isTop ? defNode.parent : defNode
         const refs = this.findIds(rootNode, node.name, defNode)
-        if (defNode.firstChild) {
-            refs.push(defNode.firstChild)
-        }
         return refs
     }
 
@@ -50,19 +47,18 @@ export class Scope {
         let curRuleName: string | undefined
         if ( curNode.name === 'Rule' || curNode.name === 'RuleSimple' ) {
             curRuleName = child ? this.getValue(child) : undefined
-        }
-        while (child) {
-            if ( child.name === 'Identifier' && this.getValue(child) === name ) {
-                curRuleName = curRuleName || child.name
-                if ( curNode.name !== 'Rule' && curNode.name !== 'RuleSimple' ) {
-                    ret.push(child)
-                }
-            } else {
-                if (curRuleName !== name || (child.from !== defNode.from && child.to !== defNode.to)) {
-                    const curRet = this.findIds(child, name, defNode)
-                    ret = ret.concat(curRet)
+            if (curRuleName === name) {
+                if (curNode.from !== defNode.from || curNode.to !== defNode.to) {
+                    return []
                 }
             }
+        }
+        while (child) {
+            if (child.name === 'Identifier' && this.getValue(child) === name) {
+                ret.push(child)
+            }
+            const curRet = this.findIds(child, name, defNode)
+            ret = ret.concat(curRet)
             child = child.nextSibling
         }
         return ret

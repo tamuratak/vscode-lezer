@@ -20,6 +20,7 @@ export class ReferenceProvider implements vscode.ReferenceProvider {
             const loc = new vscode.Location(document.uri, range)
             ret.push(loc)
         }
+        console.log(ret.length)
         return ret
     }
 }
