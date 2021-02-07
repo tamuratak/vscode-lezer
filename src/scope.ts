@@ -1,12 +1,14 @@
 import type * as lezer from 'lezer'
 
 export class Scope {
+    private readonly topNode: lezer.SyntaxNode
     private readonly content: string
     private readonly node: lezer.SyntaxNode
     private readonly children: Scope[]
     private readonly ruleDefs: lezer.SyntaxNode[]
 
-    constructor(content: string, node: lezer.SyntaxNode, children: Scope[], ruleDefs: lezer.SyntaxNode[]) {
+    constructor(topNode: lezer.SyntaxNode, content: string, node: lezer.SyntaxNode, children: Scope[], ruleDefs: lezer.SyntaxNode[]) {
+        this.topNode = topNode
         this.content = content
         this.node = node
         this.children = children
@@ -36,7 +38,12 @@ export class Scope {
         if (!defNode){
             return []
         }
-        const rootNode = defNode.parent?.type.isTop ? defNode.parent : defNode
+        let rootNode: lezer.SyntaxNode
+        if (defNode.parent?.type.isTop || defNode.parent?.name === 'Tokens') {
+            rootNode = this.topNode
+        } else {
+            rootNode = defNode
+        }
         const refs = this.findIds(rootNode, node.name, defNode)
         return refs
     }
@@ -88,27 +95,35 @@ function findRules(curNode: lezer.SyntaxNode): lezer.SyntaxNode[] {
     return result
 }
 
-function makeTopScope(content: string, curNode: lezer.SyntaxNode): Scope {
+function makeTopScope(content: string, topNode: lezer.SyntaxNode): Scope {
     const scopeArray: Scope[] = []
     const ruleDefs: lezer.SyntaxNode[] = []
-    let child = curNode.firstChild
+    let child = topNode.firstChild
     while (child) {
         if (child.name === 'Rule' || child.name === 'RuleSimple') {
             ruleDefs.push(child)
+        } else if (child.name === 'Tokens') {
+            let tok = child.firstChild
+            while (tok) {
+                if (tok.name === 'Rule' || tok.name === 'RuleSimple') {
+                    ruleDefs.push(tok)
+                }
+                tok = tok.nextSibling
+            }
         }
-        const scope = makeRuleScope(content, child)
+        const scope = makeRuleScope(topNode, content, child)
         scopeArray.push(scope)
         child = child.nextSibling
     }
-    return new Scope(content, curNode, scopeArray, ruleDefs)
+    return new Scope(topNode, content, topNode, scopeArray, ruleDefs)
 }
 
-function makeRuleScope(content: string, ruleNode: lezer.SyntaxNode): Scope {
+function makeRuleScope(topNode: lezer.SyntaxNode, content: string, ruleNode: lezer.SyntaxNode): Scope {
     const childScopes: Scope[] = []
     const rules = findRules(ruleNode)
     for( const rule of rules ) {
-        const scope = makeRuleScope(content, rule)
+        const scope = makeRuleScope(topNode, content, rule)
         childScopes.push(scope)
     }
-    return new Scope(content, ruleNode, childScopes, [ruleNode])
+    return new Scope(topNode, content, ruleNode, childScopes, [ruleNode])
 }
