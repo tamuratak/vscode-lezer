@@ -37,14 +37,14 @@ export class Scope {
             return []
         }
         const rootNode = defNode.parent?.type.isTop ? defNode.parent : defNode
-        const refs = this.findIds(rootNode, node.name)
+        const refs = this.findIds(rootNode, node.name, defNode)
         if (defNode.firstChild) {
             refs.push(defNode.firstChild)
         }
         return refs
     }
 
-    findIds(curNode: lezer.SyntaxNode, name: string): lezer.SyntaxNode[] {
+    findIds(curNode: lezer.SyntaxNode, name: string, defNode: lezer.SyntaxNode): lezer.SyntaxNode[] {
         let ret: lezer.SyntaxNode[] = []
         let child = curNode.firstChild
         let curRuleName: string | undefined
@@ -58,8 +58,8 @@ export class Scope {
                     ret.push(child)
                 }
             } else {
-                if (curRuleName !== name) {
-                    const curRet = this.findIds(child, name)
+                if (curRuleName !== name || (child.from !== defNode.from && child.to !== defNode.to)) {
+                    const curRet = this.findIds(child, name, defNode)
                     ret = ret.concat(curRet)
                 }
             }
