@@ -5,7 +5,7 @@ import {RenameProvider} from './rename'
 
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('activation')
+    console.log('Lezer language support activated.')
     context.subscriptions.push(
         vscode.languages.registerReferenceProvider(
             { scheme: 'file', language: 'lezer'},
