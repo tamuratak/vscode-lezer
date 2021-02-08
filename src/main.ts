@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import {DefinitionProvider} from './definition'
 import {ReferenceProvider} from './reference'
+import {RenameProvider} from './rename'
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -13,6 +14,10 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.languages.registerDefinitionProvider(
             { scheme: 'file', language: 'lezer'},
             new DefinitionProvider()
+        ),
+        vscode.languages.registerRenameProvider(
+            { scheme: 'file', language: 'lezer'},
+            new RenameProvider()
         )
     )
 }
