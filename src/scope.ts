@@ -39,7 +39,7 @@ export class Scope {
             return []
         }
         let rootNode: lezer.SyntaxNode
-        if (defNode.parent?.type.isTop || defNode.parent?.name === 'Tokens') {
+        if (defNode.parent?.type.isTop || defNode.parent?.name === 'Tokens' || defNode.parent?.name === 'ExternalTokens') {
             rootNode = this.topNode
         } else {
             rootNode = defNode
@@ -109,6 +109,14 @@ function makeTopScope(content: string, topNode: lezer.SyntaxNode): Scope {
                     ruleDefs.push(tok)
                 }
                 tok = tok.nextSibling
+            }
+        } else if (child.name === 'ExternalTokens' || child.name === 'ExternalSpecialize' || child.name === 'ExternalExtend') {
+            let curNode = child.firstChild
+            while (curNode) {
+                if (curNode.name === 'ExternalToken') {
+                    ruleDefs.push(curNode)
+                }
+                curNode = curNode.nextSibling
             }
         }
         const scope = makeRuleScope(topNode, content, child)
