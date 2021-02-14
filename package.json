@@ -1,7 +1,7 @@
 {
   "name": "vscode-lezer",
   "displayName": "Lezer",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "publisher": "tamuratak",
   "license": "MIT",
   "description": "Lezer language support for Visual Studio Code",
@@ -47,7 +47,7 @@
     "Lezer"
   ],
   "dependencies": {
-    "@tamuratak/lezer-grammar": "0.1.0"
+    "@tamuratak/lezer-grammar": "0.2.1"
   },
   "devDependencies": {
     "@types/node": "^12",
